@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script/>
+        <description/>
+        <direct>false</direct>
+        <endpoint>x_20458_mobi_chord_incidents_page.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+
+<!-- scripts -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.js"/>
+<script src="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.js"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"/>
+<script src="https://cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.min.js"/>
+<!-- css -->
+<link rel="stylesheet" href="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.css"></link>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+      crossorigin="anonymous"></link>
+
+<script src="x_20458_mobi_chord.chartController.jsdbx"/>	
+<script src="x_20458_mobi_chord.tableController.jsdbx"/>
+
+<link href="bc95f274db211300d1dcfcdfbf9619e4.cssdbx" rel="stylesheet" type="text/css"></link>
+	
+<g:evaluate object="true">
+  var g_ck = gs.getSession().getSessionToken();
+</g:evaluate>
+<script>
+  window.g_ck = "$[g_ck]";
+</script>
+
+<!-- The User Interface -->
+	<h1>Incidents</h1>
+
+<div ng-app="angularapp" >
+	<div ng-controller="RadarCtrl as chr">
+<canvas id="doughnut" class="chart chart-doughnut"
+  chart-data="data" chart-labels="labels">
+</canvas> 
+	</div>
+	<table ng-controller="MainCtrl as main" ng-table="main.tableParams" class="table table-striped">
+		<tr ng-repeat="row in $data track by row.number">
+<!-- 			<td data-title="'Incident Number'" ng-class="'bold'" filter="{number: 'text'}" sortable="'number'">{{row.number}}</td> -->
+			<td data-title="'Incident Number'" ng-class="'bold'" sortable="'number'">{{row.number}}</td>
+			<td data-title="'Urgency'" >{{row.urgency}}</td>
+			<td data-title="'Caller'" sortable="'caller_id'">{{row.caller_id}}</td>
+			<td data-title="'Opened'" >{{row.opened_at | date:'dd/MM/yyyy'}}</td>
+			<td data-title="'State'" ng-class="'bold'">{{row.state}}</td>
+<!--       <td data-title="'Description'">{{row.short_description}}</td> -->
+    </tr>
+  </table>
+</div>
+
+</j:jelly>]]></html>
+        <name>incidents_page</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>kostya.kozachuk</sys_created_by>
+        <sys_created_on>2018-04-11 13:07:47</sys_created_on>
+        <sys_id>deeb355bdb511300d1dcfcdfbf961970</sys_id>
+        <sys_mod_count>45</sys_mod_count>
+        <sys_name>incidents_page</sys_name>
+        <sys_package display_value="Mobi Chord POC" source="x_20458_mobi_chord">d430280bdb111300d1dcfcdfbf96198a</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mobi Chord POC">d430280bdb111300d1dcfcdfbf96198a</sys_scope>
+        <sys_update_name>sys_ui_page_deeb355bdb511300d1dcfcdfbf961970</sys_update_name>
+        <sys_updated_by>kostya.kozachuk</sys_updated_by>
+        <sys_updated_on>2018-04-17 13:11:23</sys_updated_on>
+    </sys_ui_page>
+</record_update>
