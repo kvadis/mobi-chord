@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_macro">
+    <sys_ui_macro action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <category>general</category>
+        <description/>
+        <media_type/>
+        <name>uiMacroModalDialog</name>
+        <scoped_name>x_20458_mobi_chord_uiMacroModalDialog</scoped_name>
+        <sys_class_name>sys_ui_macro</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2018-04-26 09:06:52</sys_created_on>
+        <sys_id>0805120cdb311300d1dcfcdfbf9619ef</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>uiMacroModalDialog</sys_name>
+        <sys_package display_value="Mobi Chord POC" source="x_20458_mobi_chord">d430280bdb111300d1dcfcdfbf96198a</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Mobi Chord POC">d430280bdb111300d1dcfcdfbf96198a</sys_scope>
+        <sys_update_name>sys_ui_macro_0805120cdb311300d1dcfcdfbf9619ef</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-04-26 09:06:52</sys_updated_on>
+        <xml><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+<div class="modal-header">
+	   <h4 class="modal-title">Test Dialog</h4>
+	</div>
+	<div class="modal-body">
+	   <form class="form">
+		  <div class="form-group">
+			 <label>Name</label>
+			 <input type="text" class="form-control" ng-model="name"/>
+		  </div>
+		  <div class="form-group">
+			 <label>Age</label>
+			 <input type="number" class="form-control" ng-model="age"/>
+		  </div>
+	   </form>
+	</div>
+	<div class="modal-footer">
+	   <button type="button" class="btn btn-primary" ng-click="ok()">Search</button>
+	   <button type="button" class="btn btn-default" ng-click="cancel()">Close</button>
+	</div>
+</j:jelly>]]></xml>
+    </sys_ui_macro>
+</record_update>

@@ -4,12 +4,83 @@
         <active>true</active>
         <description/>
         <global>false</global>
-        <name>x_20458_mobi_chord.tableController</name>
-        <script><![CDATA[var app = angular.module('angularapp', ['ngTable', 'chart.js']);
+        <name>x_20458_mobi_chord.mainController</name>
+        <script><![CDATA[var app = angular.module('angularapp', ['ngTable', 'chart.js', 'ui.bootstrap', 'ngAnimate']);
 
 app.controller('MainCtrl', MainCtrl);
-app.controller('RadarCtrl', RadarCtrl);
+app.controller('DoughnutCtrl', DoughnutCtrl);
+app.controller('LineCtrl', LineCtrl);
+app.controller('appController', appController);
+app.controller('dialogController', dialogController);
 
+var global_headers = {'Content-Type':'application/json', 'Accept':'application/json', 'X-UserToken':window.g_ck};
+
+//Doughnut Chart controller
+DoughnutCtrl.$inject = ['$scope', '$http'];
+function DoughnutCtrl($scope, $http) {
+	$scope.labels = [];
+	$scope.data = [];
+	$scope.options = {
+		cutoutPercentage: 85,
+		elements: { arc: { borderWidth: 0 }},
+		legend: {display: true, position: 'right'}
+	};
+	var url = '/api/now/stats/incident';
+	var queryOptions = {
+		sysparm_count: 'true',
+		sysparm_group_by: 'state',
+		sysparm_display_value: 'true'
+	};
+	$http.get(url, {
+        params: queryOptions,
+        headers: global_headers
+      })
+        .then(function (res) {
+			var response = res.data.result;
+			for (var i = 0; i < response.length; i++) {
+				$scope.labels.push(response[i].groupby_fields[0].value);
+				$scope.data.push(response[i].stats.count);
+			}
+          }, function (reason) {
+            //$defer.reject();
+          }
+        );
+}
+
+LineCtrl.$inject = ['$scope', '$http'];
+function LineCtrl($scope, $http) {
+  $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+  $scope.series = ['Series A'];
+  $scope.data = [
+    [65, 59, 80, 81, 56, 55, 40]
+  ];
+  $scope.onClick = function (points, evt) {
+    console.log(points, evt);
+  };
+  //$scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
+  $scope.options = {
+	  lineTension : 0,
+	  fill: false/*,
+    scales: {
+      yAxes: [
+        {
+          id: 'y-axis-1',
+          type: 'linear',
+          display: true,
+          position: 'left'
+        },
+        {
+          id: 'y-axis-2',
+          type: 'linear',
+          display: true,
+          position: 'right'
+        }
+      ]
+    }*/
+  };
+}
+
+//ng-table (ng-table.com) controller
 MainCtrl.$inject = ['$scope', '$filter', '$http', 'NgTableParams'];
 
 function MainCtrl($scope, $filter, $http, NgTableParams) {
@@ -30,8 +101,9 @@ function MainCtrl($scope, $filter, $http, NgTableParams) {
 		sysparm_offset: (params.page()-1) * params.count()
       };
       if (params.hasFilter()){
-        console.log('filter() = ' + JSON.stringify(params.filter()));
-        queryOptions.filter = params.filter();
+		for (var field in params.filter()){
+			queryOptions.sysparm_query = field + 'LIKE' + params.filter()[field] + '^';	
+		}
       }
       if (Object.keys(params.sorting()).length != 0){
 		  for (var field in params.sorting()){
@@ -43,7 +115,7 @@ function MainCtrl($scope, $filter, $http, NgTableParams) {
       }
       return $http.get(url, {
         params: queryOptions,
-        headers: {'Content-Type':'application/json', 'Accept':'application/json', 'X-UserToken':window.g_ck}
+        headers: global_headers
       })
         .then(function (res) {
             var vals = [];
@@ -67,26 +139,69 @@ function MainCtrl($scope, $filter, $http, NgTableParams) {
   });
 }
 
+//ui.bootstrap controller
+appController.$inject = ['$scope','$uibModal'];
+function appController($scope, $uibModal) {
+      
+      $scope.result = null;
+            
+      $scope.openDialog = function () {
+         var modalInstance = $uibModal.open({
+			templateUrl: "/x_20458_mobi_chord_modalDialog.do?sysparm_direct=true",
+            controller: "dialogController",
+            //size: "sm",
+            resolve: {
+               params: function () {
+                  return {
+                     name: "John",
+                     age: 32
+                  };
+               }
+            }
+         });
+         
+         modalInstance.result.then(function (result) {
+               $scope.result = result;
+            }, function () {
+               console.log("Dialog dismissed");
+            });
+      };
+}
 
-RadarCtrl.$inject = ['$scope'];
+dialogController.$inject = ['$scope'];
+function dialogController ($scope) {
+	var params = $scope.$resolve.params;
 
-function RadarCtrl($scope) {
- $scope.labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
-  $scope.data = [300, 500, 100];
+	$scope.name = params.name;
+	$scope.age = params.age;
+
+	$scope.cancel = function () {
+		$scope.$dismiss();
+	};
+
+	$scope.ok = function () {
+		var retObj = {
+			name: $scope.name,
+			age: $scope.age,
+			profession: "Car Mechanic",
+			yearsOfExp: 3
+		};
+		$scope.$close(retObj);
+	};
 }]]></script>
-        <script_name>tableController</script_name>
+        <script_name>mainController</script_name>
         <sys_class_name>sys_ui_script</sys_class_name>
         <sys_created_by>kostya.kozachuk</sys_created_by>
         <sys_created_on>2018-04-13 09:18:41</sys_created_on>
         <sys_id>3ac6d373db111300d1dcfcdfbf9619be</sys_id>
-        <sys_mod_count>98</sys_mod_count>
-        <sys_name>x_20458_mobi_chord.tableController</sys_name>
+        <sys_mod_count>178</sys_mod_count>
+        <sys_name>x_20458_mobi_chord.mainController</sys_name>
         <sys_package display_value="Mobi Chord POC" source="x_20458_mobi_chord">d430280bdb111300d1dcfcdfbf96198a</sys_package>
         <sys_policy/>
         <sys_scope display_value="Mobi Chord POC">d430280bdb111300d1dcfcdfbf96198a</sys_scope>
         <sys_update_name>sys_ui_script_3ac6d373db111300d1dcfcdfbf9619be</sys_update_name>
-        <sys_updated_by>kostya.kozachuk</sys_updated_by>
-        <sys_updated_on>2018-04-17 13:40:01</sys_updated_on>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-04-26 14:25:00</sys_updated_on>
         <use_scoped_format>false</use_scoped_format>
     </sys_ui_script>
 </record_update>

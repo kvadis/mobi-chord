@@ -9,65 +9,88 @@
         <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
 <j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
 
-<!-- scripts -->
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.js"/>
-<script src="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.js"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"/>
-<script src="https://cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.min.js"/>
-<!-- css -->
-<link rel="stylesheet" href="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.css"></link>
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet"
-      integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
-      crossorigin="anonymous"></link>
-
-<script src="x_20458_mobi_chord.chartController.jsdbx"/>	
-<script src="x_20458_mobi_chord.tableController.jsdbx"/>
-
-<link href="bc95f274db211300d1dcfcdfbf9619e4.cssdbx" rel="stylesheet" type="text/css"></link>
+  <!-- cdn scripts -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-animate.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-sanitize.js"></script>
+  <script src="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.js"></script>
 	
-<g:evaluate object="true">
-  var g_ck = gs.getSession().getSessionToken();
-</g:evaluate>
-<script>
-  window.g_ck = "$[g_ck]";
-</script>
+  <!-- css -->
+  <link rel="stylesheet" href="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.css"/>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+        crossorigin="anonymous"/>
+	
+  <script src="x_20458_mobi_chord.mainController.jsdbx"></script>
 
-<!-- The User Interface -->
-	<h1>Incidents</h1>
+  <link href="bc95f274db211300d1dcfcdfbf9619e4.cssdbx" rel="stylesheet" type="text/css"></link>
 
-<div ng-app="angularapp" >
-	<div ng-controller="RadarCtrl as chr">
-<canvas id="doughnut" class="chart chart-doughnut"
-  chart-data="data" chart-labels="labels">
-</canvas> 
+  <g:evaluate object="true">
+    var g_ck = gs.getSession().getSessionToken();
+  </g:evaluate>
+  <script>
+    window.g_ck = "$[g_ck]";
+  </script>
+
+  <!-- The User Interface -->
+  <div id="wrapper">
+    <div id="header">
+      <h1 class="bold">Incidents</h1>
+      <hr/>
+    </div>
+    <div id="container" ng-app="angularapp">
+      <div id="top">
+        <div id="top-left" ng-controller="DoughnutCtrl as doughnut">
+          <h4>Incidents By State</h4>
+          <canvas id="doughnut" class="chart chart-doughnut" chart-data="data" chart-labels="labels" chart-options="options"></canvas>
+        </div>
+        <div id="top-right" ng-controller="LineCtrl as linectrl">
+          <h4>Incidents Over Time</h4>
+			<canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" chart-series="series" chart-options="options" chart-dataset-override="datasetOverride" chart-click="onClick">
+			</canvas>
+        </div>
+      </div>
+      <div id="center" ng-controller="MainCtrl as main">
+		  
+        <table ng-table="main.tableParams" class="table table-striped">
+          <tr ng-repeat="row in $data track by row.number">
+            <td data-title="'Incident Number'" ng-class="'bold'" filter="{number: 'text'}" sortable="'number'">{{row.number}}</td>
+            <td data-title="'Urgency'">{{row.urgency}}</td>
+            <td data-title="'Caller'" filter="{caller_id: 'text'}" sortable="'caller_id'">{{row.caller_id}}</td>
+            <td data-title="'Opened'">{{row.opened_at | date:'dd/MM/yyyy'}}</td>
+            <td data-title="'State'" ng-class="'bold'">{{row.state}}</td>
+          </tr>
+        </table>
+      </div>
+		<div id="footer" ng-controller="appController">
+		  <button class="btn btn-default" ng-click="openDialog()">Open Dialog</button>
+		</div>
+<!-- 		<p ng-controller="SampleController"><a href="" class="btn btn-default btn-lg " ng-click="showCustom()">Show Custom</a></p> -->
+    </div>
+    <div id="footer">
 	</div>
-	<table ng-controller="MainCtrl as main" ng-table="main.tableParams" class="table table-striped">
-		<tr ng-repeat="row in $data track by row.number">
-<!-- 			<td data-title="'Incident Number'" ng-class="'bold'" filter="{number: 'text'}" sortable="'number'">{{row.number}}</td> -->
-			<td data-title="'Incident Number'" ng-class="'bold'" sortable="'number'">{{row.number}}</td>
-			<td data-title="'Urgency'" >{{row.urgency}}</td>
-			<td data-title="'Caller'" sortable="'caller_id'">{{row.caller_id}}</td>
-			<td data-title="'Opened'" >{{row.opened_at | date:'dd/MM/yyyy'}}</td>
-			<td data-title="'State'" ng-class="'bold'">{{row.state}}</td>
-<!--       <td data-title="'Description'">{{row.short_description}}</td> -->
-    </tr>
-  </table>
-</div>
+  </div>
 
-</j:jelly>]]></html>
+
+</j:jelly>
+]]></html>
         <name>incidents_page</name>
         <processing_script/>
         <sys_class_name>sys_ui_page</sys_class_name>
         <sys_created_by>kostya.kozachuk</sys_created_by>
         <sys_created_on>2018-04-11 13:07:47</sys_created_on>
         <sys_id>deeb355bdb511300d1dcfcdfbf961970</sys_id>
-        <sys_mod_count>45</sys_mod_count>
+        <sys_mod_count>106</sys_mod_count>
         <sys_name>incidents_page</sys_name>
         <sys_package display_value="Mobi Chord POC" source="x_20458_mobi_chord">d430280bdb111300d1dcfcdfbf96198a</sys_package>
         <sys_policy/>
         <sys_scope display_value="Mobi Chord POC">d430280bdb111300d1dcfcdfbf96198a</sys_scope>
         <sys_update_name>sys_ui_page_deeb355bdb511300d1dcfcdfbf961970</sys_update_name>
-        <sys_updated_by>kostya.kozachuk</sys_updated_by>
-        <sys_updated_on>2018-04-17 13:11:23</sys_updated_on>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-04-26 14:18:47</sys_updated_on>
     </sys_ui_page>
 </record_update>

@@ -1,25 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <record_update table="content_css">
     <content_css action="INSERT_OR_UPDATE">
-        <name>ng_table</name>
-        <style>.table thead th {&#13;
+        <name>incident_css</name>
+        <style>#wrapper {&#13;
+  margin:50px 50px 0px 50px;&#13;
+  padding: 20px 50px 0px 50px;&#13;
+  background-color: #f5f5f5;&#13;
+}&#13;
+&#13;
+#top {&#13;
+display: flex;&#13;
+vertical-align: top;&#13;
+padding-bottom: 10px;&#13;
+}&#13;
+#top-left {&#13;
+  float:left;&#13;
+  width:50%;&#13;
+}&#13;
+&#13;
+#top-right {&#13;
+  float:right;&#13;
+  width:50%;&#13;
+}&#13;
+&#13;
+#center {&#13;
+  vertical-align: bottom;&#13;
+  background-color: #ffffff;&#13;
+}&#13;
+&#13;
+#footer {&#13;
+}&#13;
+&#13;
+.table thead th {&#13;
   text-align: left;/*change that parameter to left/right*/&#13;
 }&#13;
+&#13;
 .bold {&#13;
-    font-weight: bold;&#13;
+  font-weight: bold;&#13;
+}&#13;
+&#13;
+.fade.in {&#13;
+  opacity: 1;&#13;
+}&#13;
+.modal.in .modal-dialog {&#13;
+  -webkit-transform: translate(0, 0);&#13;
+  -o-transform: translate(0, 0);&#13;
+  transform: translate(0, 0);&#13;
+}&#13;
+.modal-backdrop.in {&#13;
+  opacity: 0.5;&#13;
 }</style>
         <sys_class_name>content_css</sys_class_name>
         <sys_created_by>kostya.kozachuk</sys_created_by>
         <sys_created_on>2018-04-16 09:24:27</sys_created_on>
         <sys_id>bc95f274db211300d1dcfcdfbf9619e4</sys_id>
-        <sys_mod_count>1</sys_mod_count>
-        <sys_name>ng_table</sys_name>
+        <sys_mod_count>48</sys_mod_count>
+        <sys_name>incident_css</sys_name>
         <sys_package display_value="Mobi Chord POC" source="x_20458_mobi_chord">d430280bdb111300d1dcfcdfbf96198a</sys_package>
         <sys_policy/>
         <sys_scope display_value="Mobi Chord POC">d430280bdb111300d1dcfcdfbf96198a</sys_scope>
         <sys_update_name>content_css_bc95f274db211300d1dcfcdfbf9619e4</sys_update_name>
-        <sys_updated_by>kostya.kozachuk</sys_updated_by>
-        <sys_updated_on>2018-04-16 09:51:44</sys_updated_on>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-04-26 14:21:22</sys_updated_on>
         <type>local</type>
         <url/>
     </content_css>
