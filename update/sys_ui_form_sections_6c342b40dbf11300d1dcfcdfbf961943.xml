@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_ui_form_sections form_id="6c342b40dbf11300d1dcfcdfbf961943" sys_domain="global" table="cmdb_ci_wan_accel_network" version="3">
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>0</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2018-04-26 14:51:53</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>a0342b40dbf11300d1dcfcdfbf961949</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="cmdb_ci_wan_accel_network" name="cmdb_ci_wan_accel_network" sys_domain="global" view="Default view">6c342b40dbf11300d1dcfcdfbf961943</sys_ui_form>
+            <sys_ui_section caption="NULL" display_value="" name="cmdb_ci_wan_accel_network" sys_domain="global" view="Default view">64342b40dbf11300d1dcfcdfbf961946</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2018-04-26 14:51:53</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>1</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2018-04-26 14:51:53</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>20342b40dbf11300d1dcfcdfbf96194c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="cmdb_ci_wan_accel_network" name="cmdb_ci_wan_accel_network" sys_domain="global" view="Default view">6c342b40dbf11300d1dcfcdfbf961943</sys_ui_form>
+            <sys_ui_section caption="Configuration" display_value="Configuration" name="cmdb_ci_wan_accel_network" sys_domain="global" view="Default view">2c342b40dbf11300d1dcfcdfbf961949</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2018-04-26 14:51:53</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form action="INSERT_OR_UPDATE">
+            <name>cmdb_ci_wan_accel_network</name>
+            <roles/>
+            <sys_class_name>sys_ui_form</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2018-04-26 14:51:53</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>6c342b40dbf11300d1dcfcdfbf961943</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>cmdb_ci_wan_accel_network</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="Mobi Chord POC" source="x_20458_mobi_chord">d430280bdb111300d1dcfcdfbf96198a</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Mobi Chord POC">d430280bdb111300d1dcfcdfbf96198a</sys_scope>
+            <sys_update_name>sys_ui_form_sections_6c342b40dbf11300d1dcfcdfbf961943</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2018-04-26 14:51:53</sys_updated_on>
+            <sys_user/>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_form>
+    </sys_ui_form_sections>
+</record_update>

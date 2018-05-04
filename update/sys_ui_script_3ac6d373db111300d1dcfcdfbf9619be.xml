@@ -5,15 +5,14 @@
         <description/>
         <global>false</global>
         <name>x_20458_mobi_chord.mainController</name>
-        <script><![CDATA[var app = angular.module('angularapp', ['ngTable', 'chart.js', 'ui.bootstrap', 'ngAnimate']);
+        <script><![CDATA[var app = angular.module('angularapp', ['ngTable', 'chart.js', 'ui.bootstrap']);
 
 app.controller('MainCtrl', MainCtrl);
 app.controller('DoughnutCtrl', DoughnutCtrl);
 app.controller('LineCtrl', LineCtrl);
-app.controller('appController', appController);
-app.controller('dialogController', dialogController);
+app.controller('ModalDialogController', ModalDialogController);
 
-var global_headers = {'Content-Type':'application/json', 'Accept':'application/json', 'X-UserToken':window.g_ck};
+var global_headers = {'Content-Type': 'application/json', 'Accept': 'application/json', 'X-UserToken': window.g_ck};
 
 //Doughnut Chart controller
 DoughnutCtrl.$inject = ['$scope', '$http'];
@@ -22,7 +21,7 @@ function DoughnutCtrl($scope, $http) {
 	$scope.data = [];
 	$scope.options = {
 		cutoutPercentage: 85,
-		elements: { arc: { borderWidth: 0 }},
+		elements: {arc: {borderWidth: 0}},
 		legend: {display: true, position: 'right'}
 	};
 	var url = '/api/now/stats/incident';
@@ -32,161 +31,141 @@ function DoughnutCtrl($scope, $http) {
 		sysparm_display_value: 'true'
 	};
 	$http.get(url, {
-        params: queryOptions,
-        headers: global_headers
-      })
-        .then(function (res) {
-			var response = res.data.result;
-			for (var i = 0; i < response.length; i++) {
-				$scope.labels.push(response[i].groupby_fields[0].value);
-				$scope.data.push(response[i].stats.count);
+		params: queryOptions,
+		headers: global_headers
+	})
+		.then(function (res) {
+				var response = res.data.result;
+				for (var i = 0; i < response.length; i++) {
+					$scope.labels.push(response[i].groupby_fields[0].value);
+					$scope.data.push(response[i].stats.count);
+				}
+			}, function (reason) {
+				//$defer.reject();
 			}
-          }, function (reason) {
-            //$defer.reject();
-          }
-        );
+		);
 }
 
+//Draw line from dummy data
 LineCtrl.$inject = ['$scope', '$http'];
 function LineCtrl($scope, $http) {
-  $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-  $scope.series = ['Series A'];
-  $scope.data = [
-    [65, 59, 80, 81, 56, 55, 40]
-  ];
-  $scope.onClick = function (points, evt) {
-    console.log(points, evt);
-  };
-  //$scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
-  $scope.options = {
-	  lineTension : 0,
-	  fill: false/*,
-    scales: {
-      yAxes: [
-        {
-          id: 'y-axis-1',
-          type: 'linear',
-          display: true,
-          position: 'left'
-        },
-        {
-          id: 'y-axis-2',
-          type: 'linear',
-          display: true,
-          position: 'right'
-        }
-      ]
-    }*/
-  };
+	$scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+	$scope.series = ['Series A'];
+	$scope.data = [
+		[65, 59, 80, 81, 56, 55, 40]
+	];
+	$scope.onClick = function (points, evt) {
+		console.log(points, evt);
+	};
+	$scope.options = {
+		lineTension: 0,
+		fill: false
+	};
 }
 
 //ng-table (ng-table.com) controller
-MainCtrl.$inject = ['$scope', '$filter', '$http', 'NgTableParams'];
+MainCtrl.$inject = ['$scope', '$http', '$uibModal', 'NgTableParams'];
+function MainCtrl($scope, $http, $uibModal, NgTableParams) {
+	var self = this;
 
-function MainCtrl($scope, $filter, $http, NgTableParams) {
-  var self = this;
-
-  self.tableParams = new NgTableParams({
-  }, {
-    filterDelay: 0,
-	  
-    getData: function (params) {
-      var url = '/api/now/table/incident';
-      var queryOptions = {
-        sysparm_display_value: 'true',
-        sysparm_exclude_reference_link: 'true',
-        sysparm_fields: 'number,urgency,caller_id,opened_at,state',
-        sysparm_query: '',
-		sysparm_limit: params.count(),
-		sysparm_offset: (params.page()-1) * params.count()
-      };
-      if (params.hasFilter()){
-		for (var field in params.filter()){
-			queryOptions.sysparm_query = field + 'LIKE' + params.filter()[field] + '^';	
+	self.tableParams = new NgTableParams({}, {
+		filterDelay: 0,
+		getData: function (params) {
+			var url = '/api/now/table/incident';
+			var queryOptions = {
+				sysparm_display_value: 'true',
+				sysparm_exclude_reference_link: 'true',
+				sysparm_fields: 'number,description,urgency,caller_id,opened_at,state',
+				sysparm_query: '',
+				sysparm_limit: params.count(),
+				sysparm_offset: (params.page() - 1) * params.count()
+			};
+			if (params.hasFilter()) {
+				for (var field in params.filter()) {
+					queryOptions.sysparm_query = field + 'LIKE' + params.filter()[field] + '^';
+				}
+			}
+			if (Object.keys(params.sorting()).length != 0) {
+				for (var field in params.sorting()) {
+					var direction = (params.sorting()[field] == 'desc') ? 'ORDERBYDESC' : 'ORDERBY';
+					queryOptions.sysparm_query += direction + field;
+					/*queryOptions.sysparm_order = key;
+								queryOptions.sysparm_order_direction = params.sorting()[key];*/
+				}
+			}
+			return $http.get(url, {
+				params: queryOptions,
+				headers: global_headers
+			})
+				.then(function (res) {
+						var vals = [];
+						var resArray = res.data.result;
+						for (var i = 0; i < resArray.length; i++) {
+							vals.push({
+								"number": resArray[i].number,
+								"description": resArray[i].description,
+								"urgency": resArray[i].urgency,
+								"caller_id": resArray[i].caller_id,
+								"opened_at": moment(resArray[i].opened_at, 'YYYY-MM-DD HH:mm:ss').toDate(),
+								"state": resArray[i].state
+							});
+						}
+						params.total(res.headers('X-Total-Count'));
+						return vals;
+					}, function (reason) {
+						//$defer.reject();
+					}
+				);
 		}
-      }
-      if (Object.keys(params.sorting()).length != 0){
-		  for (var field in params.sorting()){
-			  var direction = (params.sorting()[field] == 'desc') ? 'ORDERBYDESC' : 'ORDERBY';
-			  queryOptions.sysparm_query += direction + field;
-			  /*queryOptions.sysparm_order = key;
-			  queryOptions.sysparm_order_direction = params.sorting()[key];*/
-		  }
-      }
-      return $http.get(url, {
-        params: queryOptions,
-        headers: global_headers
-      })
-        .then(function (res) {
-            var vals = [];
-            var resArray = res.data.result;
-            for (var i = 0; i < resArray.length; i++) {
-              vals.push({
-                "number": resArray[i].number,
-                "urgency": resArray[i].urgency,
-                "caller_id": resArray[i].caller_id,
-                "opened_at": new Date(resArray[i].opened_at),
-                "state": resArray[i].state
-              });
-            }
-			params.total(res.headers('X-Total-Count'));
-            return vals;
-          }, function (reason) {
-            //$defer.reject();
-          }
-        );
-    }
-  });
+	});
+
+	//ui.bootstrap dialog init
+	$scope.result = null;
+	$scope.openDialog = function (row) {
+		var modalInstance = $uibModal.open({
+			animation: $scope.animationsEnabled,
+			templateUrl: "/x_20458_mobi_chord_incident_modal.do?sysparm_direct=true",
+			controller: "ModalDialogController",
+			size: 'lg',
+			resolve: {
+				params: function () {
+					return {
+						number: row.number,
+						description: row.description,
+						urgency: row.urgency,
+						caller_id: row.caller_id,
+						opened_at: row.opened_at,
+						state: row.state
+					};
+				}
+			}
+		});
+
+		modalInstance.result.then(function (result) {
+			$scope.result = result;
+		}, function () {
+			console.log("Dialog dismissed");
+		});
+	};
 }
 
-//ui.bootstrap controller
-appController.$inject = ['$scope','$uibModal'];
-function appController($scope, $uibModal) {
-      
-      $scope.result = null;
-            
-      $scope.openDialog = function () {
-         var modalInstance = $uibModal.open({
-			templateUrl: "/x_20458_mobi_chord_modalDialog.do?sysparm_direct=true",
-            controller: "dialogController",
-            //size: "sm",
-            resolve: {
-               params: function () {
-                  return {
-                     name: "John",
-                     age: 32
-                  };
-               }
-            }
-         });
-         
-         modalInstance.result.then(function (result) {
-               $scope.result = result;
-            }, function () {
-               console.log("Dialog dismissed");
-            });
-      };
-}
-
-dialogController.$inject = ['$scope'];
-function dialogController ($scope) {
+ModalDialogController.$inject = ['$scope'];
+function ModalDialogController($scope) {
 	var params = $scope.$resolve.params;
 
-	$scope.name = params.name;
-	$scope.age = params.age;
+	$scope.number = params.number;
+	$scope.description = params.description;
+	$scope.urgency = params.urgency;
+	$scope.caller_id = params.caller_id;
+	$scope.opened_at = params.opened_at;
+	$scope.state = params.state;
 
 	$scope.cancel = function () {
 		$scope.$dismiss();
 	};
 
 	$scope.ok = function () {
-		var retObj = {
-			name: $scope.name,
-			age: $scope.age,
-			profession: "Car Mechanic",
-			yearsOfExp: 3
-		};
-		$scope.$close(retObj);
+		$scope.$close();
 	};
 }]]></script>
         <script_name>mainController</script_name>
@@ -194,14 +173,14 @@ function dialogController ($scope) {
         <sys_created_by>kostya.kozachuk</sys_created_by>
         <sys_created_on>2018-04-13 09:18:41</sys_created_on>
         <sys_id>3ac6d373db111300d1dcfcdfbf9619be</sys_id>
-        <sys_mod_count>178</sys_mod_count>
+        <sys_mod_count>204</sys_mod_count>
         <sys_name>x_20458_mobi_chord.mainController</sys_name>
         <sys_package display_value="Mobi Chord POC" source="x_20458_mobi_chord">d430280bdb111300d1dcfcdfbf96198a</sys_package>
         <sys_policy/>
         <sys_scope display_value="Mobi Chord POC">d430280bdb111300d1dcfcdfbf96198a</sys_scope>
         <sys_update_name>sys_ui_script_3ac6d373db111300d1dcfcdfbf9619be</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2018-04-26 14:25:00</sys_updated_on>
+        <sys_updated_on>2018-05-04 13:27:22</sys_updated_on>
         <use_scoped_format>false</use_scoped_format>
     </sys_ui_script>
 </record_update>
